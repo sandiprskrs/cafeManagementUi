@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from '@/components/shared/Sidebar';
@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -26,10 +27,13 @@ export default function DashboardLayout({
 
     return (
         <div className="flex h-screen overflow-hidden bg-background">
-            <Sidebar />
+            <Sidebar
+                isOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+            />
             <div className="flex-1 flex flex-col overflow-hidden">
-                <Navbar />
-                <main className="flex-1 overflow-y-auto p-6">
+                <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
+                <main className="flex-1 overflow-y-auto p-4 md:p-6">
                     {children}
                 </main>
             </div>
