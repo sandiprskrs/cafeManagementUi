@@ -45,16 +45,52 @@ export default function OrdersPage() {
         clearCart();
     };
 
+    const [mobileTab, setMobileTab] = useState<'tables' | 'menu' | 'cart'>('menu');
+
     return (
-        <div className="h-full flex gap-4 animate-fade-in">
+        <div className="h-full flex flex-col md:flex-row gap-4 animate-fade-in relative">
+            {/* Mobile Tab Navigation */}
+            <div className="md:hidden grid grid-cols-3 gap-2 mb-2">
+                <Button
+                    variant={mobileTab === 'tables' ? 'primary' : 'outline'}
+                    size="sm"
+                    onClick={() => setMobileTab('tables')}
+                >
+                    Tables
+                </Button>
+                <Button
+                    variant={mobileTab === 'menu' ? 'primary' : 'outline'}
+                    size="sm"
+                    onClick={() => setMobileTab('menu')}
+                >
+                    Menu
+                </Button>
+                <Button
+                    variant={mobileTab === 'cart' ? 'primary' : 'outline'}
+                    size="sm"
+                    onClick={() => setMobileTab('cart')}
+                    className="relative"
+                >
+                    Cart
+                    {cart.items.length > 0 && (
+                        <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center rounded-full">
+                            {cart.items.length}
+                        </Badge>
+                    )}
+                </Button>
+            </div>
+
             {/* Tables */}
-            <div className="w-64 space-y-4">
+            <div className={`w-full md:w-64 space-y-4 ${mobileTab === 'tables' ? 'block' : 'hidden md:block'}`}>
                 <h2 className="text-lg font-semibold">Tables</h2>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-2">
                     {tables.map((table) => (
                         <button
                             key={table.id}
-                            onClick={() => handleTableSelect(table.id)}
+                            onClick={() => {
+                                handleTableSelect(table.id);
+                                if (window.innerWidth < 768) setMobileTab('menu');
+                            }}
                             className={`p-4 rounded-lg border-2 transition-smooth hover-lift ${selectedTable === table.id
                                 ? 'border-primary bg-primary/10'
                                 : 'border-border hover:border-primary/50'
@@ -82,7 +118,7 @@ export default function OrdersPage() {
             </div>
 
             {/* Menu */}
-            <div className="flex-1 space-y-4">
+            <div className={`flex-1 space-y-4 ${mobileTab === 'menu' ? 'block' : 'hidden md:block'}`}>
                 <div>
                     <h2 className="text-lg font-semibold mb-3">Menu</h2>
                     <div className="flex gap-2 flex-wrap">
@@ -99,13 +135,18 @@ export default function OrdersPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-20 md:pb-0">
                     {menuItems.map((item) => (
                         <Card
                             key={item.id}
                             className={`cursor-pointer transition-smooth hover-lift ${!item.isAvailable ? 'opacity-50' : ''
                                 }`}
-                            onClick={() => item.isAvailable && addItem(item)}
+                            onClick={() => {
+                                if (item.isAvailable) {
+                                    addItem(item);
+                                    showToast(`${item.name} added to cart`, 'success');
+                                }
+                            }}
                         >
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-base">{item.name}</CardTitle>
@@ -131,7 +172,7 @@ export default function OrdersPage() {
             </div>
 
             {/* Cart */}
-            <div className="w-80 space-y-4">
+            <div className={`w-full md:w-80 space-y-4 ${mobileTab === 'cart' ? 'block' : 'hidden md:block'}`}>
                 <h2 className="text-lg font-semibold">Current Order</h2>
                 <Card>
                     <CardHeader>
@@ -148,7 +189,7 @@ export default function OrdersPage() {
                             </p>
                         ) : (
                             <>
-                                <div className="space-y-3 max-h-96 overflow-y-auto">
+                                <div className="space-y-3 max-h-[calc(100vh-400px)] md:max-h-96 overflow-y-auto">
                                     {cart.items.map((item) => (
                                         <div key={item.id} className="flex items-start gap-2 p-2 rounded border">
                                             <div className="flex-1">

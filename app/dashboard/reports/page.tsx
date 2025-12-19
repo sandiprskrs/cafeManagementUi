@@ -25,7 +25,7 @@ export default function ReportsPage() {
             </div>
 
             {/* KPI Summary */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -73,7 +73,7 @@ export default function ReportsPage() {
                 </Card>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 {/* Top Selling Items */}
                 <Card>
                     <CardHeader>

@@ -17,7 +17,7 @@ export default function DashboardPage() {
             </div>
 
             {/* KPI Cards */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Orders Today</CardTitle>
@@ -86,10 +86,10 @@ export default function DashboardPage() {
                                 <div className="text-right">
                                     <span
                                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${order.status === 'paid'
-                                                ? 'bg-success/10 text-success'
-                                                : order.status === 'ready'
-                                                    ? 'bg-info/10 text-info'
-                                                    : 'bg-warning/10 text-warning'
+                                            ? 'bg-success/10 text-success'
+                                            : order.status === 'ready'
+                                                ? 'bg-info/10 text-info'
+                                                : 'bg-warning/10 text-warning'
                                             }`}
                                     >
                                         {order.status}
